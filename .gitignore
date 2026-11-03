@@ -1,0 +1,15 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+
+# Databaze (obsahuje uzivatelska data)
+*.db
+*.sqlite3
+
+# Editor nastroje
+.vscode/
+.claudio/
+
+# OS
+.DS_Store

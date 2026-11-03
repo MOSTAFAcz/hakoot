@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+    <h1>Game Room</h1>
+
+    <h2 class="display-2 fw-bold text-primary">
+        {{ room.room_code }}
+    </h2>
+
+    <p>Share this code with your friends!</p>
+
+    <h3 class="mt-5">Players</h3>
+
+    <ul id="players" class="list-group mb-4"></ul>
+
+    <button id="start-button" class="btn btn-success btn-lg">
+        Start Game
+    </button>
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script>
+    const socket = io();
+    const roomCode = "{{ room.room_code }}";
+
+    socket.emit("host_join", { room_code: roomCode });
+
+    socket.on("player_list", players => {
+        const list = document.getElementById("players");
+        list.innerHTML = "";
+
+        players.forEach(player => {
+            const item = document.createElement("li");
+            item.className = "list-group-item";
+            item.textContent = player.nickname;
+            list.appendChild(item);
+        });
+    });
+
+    document.getElementById("start-button").onclick = () => {
+        socket.emit("start_game", { room_code: roomCode });
+    };
+
+    socket.on("game_started", () => {
+        alert("Game started!");
+    });
+</script>
+
+{% endblock %}

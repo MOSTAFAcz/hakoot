@@ -1,0 +1,62 @@
+
+{% extends "base.html" %}
+
+{% block title %}Game Room - QuizBattle{% endblock %}
+
+{% block content %}
+
+<div class="container text-center mt-5">
+
+    <h1>QuizBattle</h1>
+
+    <h2>Welcome, {{ player.nickname }}!</h2>
+
+    <h3 class="mt-5">
+        Room: {{ room.room_code }}
+    </h3>
+
+    <div id="status" class="alert alert-info mt-4">
+        Waiting for host to start the game...
+    </div>
+
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script>
+    const roomCode = {{ room.room_code | tojson }};
+    const playerId = {{ player.id | tojson }};
+
+    const socket = io();
+
+    const statusElement = document.getElementById("status");
+
+    socket.on("connect", function () {
+        socket.emit("join_game", {
+            room_code: roomCode,
+            player_id: playerId
+        });
+    });
+
+    socket.on("joined_success", function (data) {
+        statusElement.textContent =
+            "Connected as " + data.nickname + ". Waiting for host...";
+    });
+
+    socket.on("join_error", function (data) {
+        statusElement.textContent = data.message;
+        statusElement.className = "alert alert-danger mt-4";
+    });
+
+    socket.on("game_started", function () {
+        statusElement.textContent = "The game has started!";
+        statusElement.className = "alert alert-success mt-4";
+    });
+
+    socket.on("disconnect", function () {
+        statusElement.textContent = "Disconnected. Reconnecting...";
+        statusElement.className = "alert alert-warning mt-4";
+    });
+</script>
+
+{% endblock %}

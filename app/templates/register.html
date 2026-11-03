@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Register - QuizBattle{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow p-4">
+            <h2 class="text-center mb-4">Create Account</h2>
+
+            <form method="POST">
+                <input name="username" class="form-control mb-3"
+                       placeholder="Username" required>
+
+                <input name="email" type="email" class="form-control mb-3"
+                       placeholder="Email" required>
+
+                <input name="password" type="password" class="form-control mb-3"
+                       placeholder="Password (min. 8 characters)" minlength="8" required>
+
+                <button class="btn btn-primary w-100">Register</button>
+            </form>
+
+            <p class="text-center mt-3">
+                Already have an account?
+                <a href="/login">Login</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

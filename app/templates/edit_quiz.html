@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Quiz{% endblock %}
+
+{% block content %}
+
+<h1>{{ quiz.title }}</h1>
+<p class="text-secondary">{{ quiz.description }}</p>
+
+<div class="row">
+    <div class="col-md-7">
+
+        <div class="card shadow p-4 mb-4">
+            <h3>Add Question</h3>
+
+            <form method="POST">
+
+                <label class="form-label">Question</label>
+                <input
+                    type="text"
+                    name="question"
+                    class="form-control mb-3"
+                    required
+                >
+
+                {% for i in range(4) %}
+                    <label class="form-label">
+                        Answer {{ i + 1 }}
+                    </label>
+
+                    <input
+                        type="text"
+                        name="answers"
+                        class="form-control mb-3"
+                        required
+                    >
+                {% endfor %}
+
+                <label class="form-label">Correct answer</label>
+
+                <select name="correct" class="form-select mb-3" required>
+                    <option value="0">Answer 1</option>
+                    <option value="1">Answer 2</option>
+                    <option value="2">Answer 3</option>
+                    <option value="3">Answer 4</option>
+                </select>
+
+                <button class="btn btn-success w-100">
+                    Add Question
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+
+    <div class="col-md-5">
+        <h3>Questions ({{ quiz.questions|length }})</h3>
+
+        {% for question in quiz.questions %}
+        <div class="card shadow-sm mb-3">
+            <div class="card-body">
+                <h5>{{ loop.index }}. {{ question.text }}</h5>
+
+                {% for answer in question.answers %}
+                    <div class="mb-1">
+                        {% if answer.is_correct %}
+                            <span class="text-success fw-bold">
+                                ✓ {{ answer.text }}
+                            </span>
+                        {% else %}
+                            <span>{{ answer.text }}</span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            <p class="text-secondary">No questions yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mt-3">
+    Back to Dashboard
+</a>
+
+{% endblock %}
